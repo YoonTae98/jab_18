@@ -12,20 +12,142 @@
         href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
     >
 
-    <title>검색 결과</title>
+    <title>잡서치 결과</title>
+
+    <style>
+
+        body {
+            background-color: #f5f7fa;
+        }
+
+        main {
+            max-width: 1400px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .search-info {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .button-area {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            background-color: white;
+        }
+
+        th {
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 14px 10px;
+            vertical-align: middle;
+        }
+
+        /* No */
+        th:nth-child(1),
+        td:nth-child(1) {
+            width: 60px;
+            text-align: center;
+        }
+
+        /* 사이트 */
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: 100px;
+            text-align: center;
+        }
+
+        /* 회사 */
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 180px;
+        }
+
+        /* 공고제목 */
+        th:nth-child(4),
+        td:nth-child(4) {
+            width: 45%;
+        }
+
+        /* 위치 */
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 180px;
+        }
+
+        /* 상세보기 */
+        th:nth-child(6),
+        td:nth-child(6) {
+            width: 100px;
+            text-align: center;
+        }
+
+        /* 긴 글 처리 */
+        td {
+            word-break: keep-all;
+        }
+
+        .detail-button {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 6px;
+            background-color: #e9ecef;
+            color: #333;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .back-button {
+            margin-top: 20px;
+        }
+
+    </style>
 
 </head>
 
+
 <body>
 
-    <main class="container">
+    <main>
 
-        <h1>{{ keyword }} 잡서치 결과</h1>
+        <h1>
+            {{ keyword }} 잡서치 결과
+        </h1>
 
 
-        <div>
+        <div class="search-info">
 
-            <a href="/file?keyword={{ keyword }}">
+            {% if site == "all" %}
+
+                인크루트 + 사람인 전체 검색 결과
+
+            {% elif site == "incruit" %}
+
+                인크루트 검색 결과
+
+            {% elif site == "saramin" %}
+
+                사람인 검색 결과
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="button-area">
+
+            <a href="/file?keyword={{ keyword }}&site={{ site }}">
 
                 <button>
                     CSV 다운로드
@@ -43,15 +165,10 @@
                 <tr>
 
                     <th>No</th>
-
                     <th>사이트</th>
-
                     <th>회사</th>
-
                     <th>공고제목</th>
-
                     <th>위치</th>
-
                     <th>상세보기</th>
 
                 </tr>
@@ -61,12 +178,12 @@
 
             <tbody>
 
-                {% for index, job in jobs %}
+                {% for job in jobs %}
 
                 <tr>
 
                     <td>
-                        {{ index + 1 }}
+                        {{ loop.index }}
                     </td>
 
                     <td>
@@ -88,6 +205,7 @@
                     <td>
 
                         <a
+                            class="detail-button"
                             href="{{ job['link'] }}"
                             target="_blank"
                         >
@@ -103,6 +221,15 @@
             </tbody>
 
         </table>
+
+
+        <div class="back-button">
+
+            <a href="/">
+                ← 다시 검색하기
+            </a>
+
+        </div>
 
     </main>
 

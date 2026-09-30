@@ -1,30 +1,54 @@
 import requests
 from bs4 import BeautifulSoup
+from urllib.parse import quote
 
 
 def search_saramin(keyword):
 
     jobs = []
 
-    url = f"https://www.saramin.co.kr/zf_user/search/recruit?searchword={keyword}"
+    keyword = quote(keyword)
+
+    url = (
+        "https://www.saramin.co.kr/zf_user/search/recruit"
+        f"?searchType=search"
+        f"&searchword={keyword}"
+        f"&search_done=y"
+        f"&search_optional_item=n"
+        f"&recruitPage=1"
+        f"&recruitSort=relation"
+        f"&recruitPageCount=30"
+    )
 
     headers = {
-        "User-Agent": "Mozilla/5.0"
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 "
+            "(KHTML, like Gecko) "
+            "Chrome/154.0.0.0 Safari/537.36"
+        )
     }
 
     response = requests.get(url, headers=headers)
+
+    print("사람인 상태코드:", response.status_code)
 
     soup = BeautifulSoup(response.text, "html.parser")
 
     recruit_list = soup.select("div.item_recruit")
 
+    print("사람인 검색 결과:", len(recruit_list))
+
     for item in recruit_list:
 
-        company_tag = item.select_one("strong.company_nm a")
+        # 회사
+        company_tag = item.select_one("strong.corp_name")
 
+        # 제목
         title_tag = item.select_one("h2.job_tit a")
 
-        location_tag = item.select_one("div.job_condition span")
+        # 지역
+        location_tag = item.select_one(".job_condition")
 
         if not company_tag or not title_tag:
             continue
@@ -52,5 +76,7 @@ def search_saramin(keyword):
         }
 
         jobs.append(job_data)
+
+    print("사람인 최종 결과:", len(jobs))
 
     return jobs

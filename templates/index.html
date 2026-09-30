@@ -16,19 +16,72 @@
 
 </head>
 
+
 <body>
 
     <main class="container">
 
         <h1>빅데이터 전문가 양성과정</h1>
 
-        <form action="/search">
+
+        <form action="/search" method="get">
+
+            <label>
+                검색어
+            </label>
 
             <input
                 type="text"
                 name="keyword"
                 placeholder="검색어를 입력하세요"
+                required
             >
+
+
+            <label>
+                검색 사이트
+            </label>
+
+
+            <label>
+
+                <input
+                    type="radio"
+                    name="site"
+                    value="all"
+                    checked
+                >
+
+                전체 사이트
+
+            </label>
+
+
+            <label>
+
+                <input
+                    type="radio"
+                    name="site"
+                    value="incruit"
+                >
+
+                인크루트
+
+            </label>
+
+
+            <label>
+
+                <input
+                    type="radio"
+                    name="site"
+                    value="saramin"
+                >
+
+                사람인
+
+            </label>
+
 
             <button type="submit">
                 검색
